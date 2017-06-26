@@ -1,0 +1,22 @@
+#!/bin/bash
+use=`df -h | grep sd | awk '{print $5}' | sort -n | tail -n 1 | cut -d "%" -f1`
+
+case $use in
+[1-6]*)
+  mesg="There is enough space on the disc. One partition at $use %."
+  ;;
+[7-8]*)
+  mesg="It starts to fill the partition. One partition at $use %."
+  ;;
+9[1-8])
+  mesg="It would be worthwhile to buy a new disc!  One partition is $use % full."
+  ;;
+99)
+  mesg="The one partition almost full!  One partition is $use % full!"
+  ;;
+*)
+  mesg="One of the partitions is full!!! One partition is $use % full!"
+  ;;
+esac
+
+echo $mesg | mail -s "The current disk state report. `date`" $USER
